@@ -19,38 +19,43 @@ def setup():
     return df, tfidf, tfidf_matrix, similarity_matrix
 
 def find_career(df, career_name):
-    career_name = career_name.lower()
+    career_name = career_name.lower().strip()
     
-    # Search in name
+    # First try exact partial match in name
     matches = df[df['name'].str.lower().str.contains(career_name)]
     if not matches.empty:
-        idx = matches.index[0]
-        return idx, df['name'][idx]
-    
-    # Search in category
+        return matches.index[0], df['name'][matches.index[0]]
+
+    # Try category
     matches = df[df['category'].str.lower().str.contains(career_name)]
     if not matches.empty:
-        idx = matches.index[0]
-        return idx, df['name'][idx]
+        return matches.index[0], df['name'][matches.index[0]]
 
-    # Search in stream
+    # Try stream
     matches = df[df['stream'].str.lower().str.contains(career_name)]
     if not matches.empty:
-        idx = matches.index[0]
-        return idx, df['name'][idx]
+        return matches.index[0], df['name'][matches.index[0]]
 
-    # Search in skills_needed
+    # Try skills
     matches = df[df['skills_needed'].str.lower().str.contains(career_name)]
     if not matches.empty:
-        idx = matches.index[0]
-        return idx, df['name'][idx]
+        return matches.index[0], df['name'][matches.index[0]]
 
-    # Search in description
+    # Try description
     matches = df[df['description'].str.lower().str.contains(career_name)]
     if not matches.empty:
-        idx = matches.index[0]
-        return idx, df['name'][idx]
+        return matches.index[0], df['name'][matches.index[0]]
 
+    # FUZZY MATCH — handles spelling mistakes like "dictor" → "doctor"
+    from fuzzywuzzy import process
+    all_names = df['name'].tolist()
+    best_match, score = process.extractOne(career_name, all_names)
+    
+    if score >= 50:  # 50% similarity is enough
+        idx = df[df['name'] == best_match].index[0]
+        print(f"Fuzzy matched '{career_name}' → '{best_match}' (score: {score})")
+        return idx, best_match
+    
     return None, f"No career found matching '{career_name}'. Try: doctor, engineer, lawyer, designer, CA, pilot"
 
 def get_recommendations(career_name, df, similarity_matrix, top_n=5):
