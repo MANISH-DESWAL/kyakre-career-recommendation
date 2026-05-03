@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KyaKre - Career Guidance After 12th</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; min-height: 100vh; }
+
+        /* ---- HEADER ---- */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0 40px;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .logo span { opacity: 0.8; font-weight: 400; font-size: 14px; margin-left: 8px; }
+
+        /* ---- NAV TABS ---- */
+        nav { display: flex; gap: 4px; }
+        .nav-tab {
+            padding: 8px 18px;
+            border-radius: 8px;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+        }
+        .nav-tab:hover { background: rgba(255,255,255,0.15); color: white; }
+        .nav-tab.active { background: rgba(255,255,255,0.25); color: white; font-weight: 600; }
+
+        /* ---- PAGES ---- */
+        .page { display: none; }
+        .page.active { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        /* ---- HOME PAGE ---- */
+        .hero {
+            text-align: center;
+            padding: 50px 20px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 40px;
+        }
+        .hero h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+        .hero p { font-size: 16px; opacity: 0.9; margin-bottom: 30px; }
+        .hero-search {
+            display: flex;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .hero-search input {
+            flex: 1;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+        }
+        .hero-search button {
+            padding: 16px 28px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .hero-search button:hover { background: #ee5a5a; }
+
+        .quick-tags { margin-top: 16px; }
+        .quick-tags span {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .quick-tags span:hover { background: rgba(255,255,255,0.35); }
+
+        /* ---- STATS BAR ---- */
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            flex: 1;
+            max-width: 200px;
+        }
+        .stat-card .num { font-size: 28px; font-weight: 800; color: #667eea; }
+        .stat-card .lbl { font-size: 13px; color: #718096; margin-top: 4px; }
+
+        /* ---- SEARCH RESULTS ---- */
+        #homeResults { margin-top: 20px; }
+
+        /* ---- STREAM PAGE ---- */
+        .stream-selector {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .stream-btn {
+            flex: 1;
+            padding: 20px;
+            border-radius: 14px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .stream-btn.sci { background: #f0fff4; color: #276749; border-color: #48bb78; }
+        .stream-btn.com { background: #fffaf0; color: #7b341e; border-color: #ed8936; }
+        .stream-btn.art { background: #fff5f5; color: #742a2a; border-color: #e53e3e; }
+        .stream-btn:hover, .stream-btn.selected { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .stream-btn .emoji { font-size: 28px; display: block; margin-bottom: 8px; }
+        .stream-btn .count { font-size: 12px; opacity: 0.7; margin-top: 4px; font-weight: 400; }
+
+        .career-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+        .career-grid-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-top: 4px solid #667eea;
+        }
+        .career-grid-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .career-grid-card.sci { border-top-color: #48bb78; }
+        .career-grid-card.com { border-top-color: #ed8936; }
+        .career-grid-card.art { border-top-color: #e53e3e; }
+        .career-grid-card h4 { font-size: 14px; color: #1a202c; margin-bottom: 6px; font-weight: 700; }
+        .career-grid-card p { font-size: 12px; color: #718096; line-height: 1.4; margin-bottom: 10px; }
+        .career-grid-card .salary { font-size: 13px; color: #48bb78; font-weight: 700; }
+
+        /* ---- QUIZ PAGE ---- */
+        .quiz-container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .quiz-card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+        .quiz-card h3 { font-size: 20px; color: #2d3748; margin-bottom: 6px; font-weight: 700; }
+        .quiz-card p { font-size: 14px; color: #718096; margin-bottom: 24px; }
+        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .quiz-option {
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #4a5568;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 500;
+        }
+        .quiz-option:hover { border-color: #667eea; color: #667eea; background: #f0f0ff; }
+        .quiz-option.selected { border-color: #667eea; background: #667eea; color: white; }
+        .quiz-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .quiz-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .progress-bar { height: 6px; background: #e2e8f0; border-radius: 6px; margin-bottom: 30px; }
+        .progress-fill { height: 6px; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 6px; transition: width 0.3s; }
+
+        /* ---- EXPLORE PAGE ---- */
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .cat-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #4a5568;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .cat-btn:hover, .cat-btn.active { border-color: #667eea; background: #667eea; color: white; }
+
+        /* ---- SHARED CARD STYLES ---- */
+        .career-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-left: 5px solid #667eea;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .career-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .career-card.sci { border-left-color: #48bb78; }
+        .career-card.com { border-left-color: #ed8936; }
+        .career-card.art { border-left-color: #e53e3e; }
+        .card-left { display: flex; align-items: flex-start; flex: 1; }
+        .rank { font-size: 12px; font-weight: 700; color: #a0aec0; margin-right: 14px; min-width: 24px; padding-top: 3px; }
+        .career-info h3 { font-size: 16px; color: #1a202c; margin-bottom: 6px; font-weight: 700; }
+        .career-info p { font-size: 13px; color: #718096; margin-bottom: 8px; max-width: 480px; line-height: 1.5; }
+        .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .badge-sci { background: #f0fff4; color: #276749; }
+        .badge-com { background: #fffaf0; color: #7b341e; }
+        .badge-art { background: #fff5f5; color: #742a2a; }
+        .badge-cat { background: #ebf4ff; color: #2b6cb0; }
+        .badge-sal { background: #f0fff4; color: #276749; }
+        .skills-text { font-size: 12px; color: #a0aec0; }
+        .skills-text span { color: #667eea; font-weight: 500; }
+        .score-box { text-align: center; min-width: 80px; }
+        .score { font-size: 24px; font-weight: 800; color: #667eea; }
+        .score-label { font-size: 11px; color: #a0aec0; margin-top: 2px; }
+        .score-bar { width: 70px; height: 6px; background: #e2e8f0; border-radius: 6px; margin: 8px auto 0; }
+        .score-fill { height: 6px; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 6px; }
+
+        .error-box { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 10px; padding: 16px; color: #c53030; font-size: 14px; }
+        .loading { text-align: center; padding: 40px; color: #a0aec0; font-size: 15px; }
+        .section-title { font-size: 20px; font-weight: 700; color: #2d3748; margin-bottom: 6px; }
+        .section-sub { font-size: 14px; color: #718096; margin-bottom: 24px; }
+
+        /* ---- ABOUT PAGE ---- */
+        .about-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+        .about-card h3 { font-size: 18px; font-weight: 700; color: #2d3748; margin-bottom: 12px; }
+        .about-card p { font-size: 14px; color: #4a5568; line-height: 1.8; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+        .tech-badge { padding: 6px 16px; background: #f0f0ff; color: #667eea; border-radius: 20px; font-size: 13px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="header-inner">
+        <div class="logo">🎯 KyaKre <span>Career Guidance</span></div>
+        <nav>
+            <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
+            <button class="nav-tab" onclick="showPage('stream')">📚 By Stream</button>
+            <button class="nav-tab" onclick="showPage('quiz')">🎯 Career Quiz</button>
+            <button class="nav-tab" onclick="showPage('explore')">🔍 Explore</button>
+            <button class="nav-tab" onclick="showPage('about')">ℹ️ About</button>
+        </nav>
+    </div>
+</header>
+
+<!-- ======================== HOME PAGE ======================== -->
+<div id="page-home" class="page active">
+    <div class="hero">
+        <h2>Confused after 12th? 🤔</h2>
+        <p>Tell us your interest and our AI will find the perfect career for you!</p>
+        <div class="hero-search">
+            <input type="text" id="homeInput" placeholder="Type a career or interest... e.g. doctor, coding, drawing"
+                onkeypress="if(event.key==='Enter') homeSearch()"/>
+            <button onclick="homeSearch()">Find Careers →</button>
+        </div>
+        <div class="quick-tags">
+            Try:
+            <span onclick="homeQuick('doctor')">👨‍⚕️ Doctor</span>
+            <span onclick="homeQuick('engineer')">⚙️ Engineer</span>
+            <span onclick="homeQuick('lawyer')">⚖️ Lawyer</span>
+            <span onclick="homeQuick('design')">🎨 Design</span>
+            <span onclick="homeQuick('IAS')">🏛️ IAS</span>
+            <span onclick="homeQuick('data scientist')">📊 Data Science</span>
+            <span onclick="homeQuick('pilot')">✈️ Pilot</span>
+            <span onclick="homeQuick('CA')">💰 CA</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat-card"><div class="num">100+</div><div class="lbl">Career Options</div></div>
+            <div class="stat-card"><div class="num">3</div><div class="lbl">Streams Covered</div></div>
+            <div class="stat-card"><div class="num">AI</div><div class="lbl">Powered Matching</div></div>
+            <div class="stat-card"><div class="num">Free</div><div class="lbl">No Cost Ever</div></div>
+        </div>
+        <div id="homeResults"></div>
+    </div>
+</div>
+
+<!-- ======================== STREAM PAGE ======================== -->
+<div id="page-stream" class="page">
+    <div class="container">
+        <div class="section-title">Browse by Stream</div>
+        <div class="section-sub">Select your stream after 12th to see relevant career options</div>
+
+        <div class="stream-selector">
+            <div class="stream-btn sci" onclick="loadStream('Science', this)">
+                <span class="emoji">🔬</span>
+                Science
+                <div class="count">51 careers</div>
+            </div>
+            <div class="stream-btn com" onclick="loadStream('Commerce', this)">
+                <span class="emoji">📊</span>
+                Commerce
+                <div class="count">21 careers</div>
+            </div>
+            <div class="stream-btn art" onclick="loadStream('Arts', this)">
+                <span class="emoji">🎨</span>
+                Arts
+                <div class="count">28 careers</div>
+            </div>
+        </div>
+
+        <div id="streamResults"></div>
+    </div>
+</div>
+
+<!-- ======================== QUIZ PAGE ======================== -->
+<div id="page-quiz" class="page">
+    <div class="container">
+        <div class="section-title">🎯 Career Match Quiz</div>
+        <div class="section-sub">Answer 4 quick questions and we'll recommend the best careers for you!</div>
+
+        <div class="quiz-container">
+            <div class="progress-bar"><div class="progress-fill" id="quizProgress" style="width:0%"></div></div>
+
+            <!-- Q1 -->
+            <div class="quiz-card" id="q1">
+                <h3>Q1. What was your stream in 12th?</h3>
+                <p>Select the stream you studied or plan to study</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption('stream','Science', this)">🔬 Science (PCM/PCB)</div>
+                    <div class="quiz-option" onclick="selectOption('stream','Commerce', this)">📊 Commerce</div>
+                    <div class="quiz-option" onclick="selectOption('stream','Arts', this)">🎨 Arts/Humanities</div>
+                    <div class="quiz-option" onclick="selectOption('stream','Any', this)">🤷 Not decided yet</div>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-card" id="q2">
+                <h3>Q2. What do you enjoy most?</h3>
+                <p>Pick the activity you genuinely love doing</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption('interest','helping people', this)">❤️ Helping People</div>
+                    <div class="quiz-option" onclick="selectOption('interest','coding technology', this)">💻 Technology & Coding</div>
+                    <div class="quiz-option" onclick="selectOption('interest','drawing design creativity', this)">🎨 Art & Design</div>
+                    <div class="quiz-option" onclick="selectOption('interest','money finance business', this)">💰 Business & Finance</div>
+                    <div class="quiz-option" onclick="selectOption('interest','writing communication', this)">✍️ Writing & Communication</div>
+                    <div class="quiz-option" onclick="selectOption('interest','government law leadership', this)">🏛️ Government & Law</div>
+                    <div class="quiz-option" onclick="selectOption('interest','science research', this)">🔬 Research & Science</div>
+                    <div class="quiz-option" onclick="selectOption('interest','sports physical fitness', this)">⚽ Sports & Fitness</div>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-card" id="q3">
+                <h3>Q3. What's your salary expectation?</h3>
+                <p>What kind of earning potential are you looking for?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption('salary','high')">💎 High (15+ LPA)</div>
+                    <div class="quiz-option" onclick="selectOption('salary','medium')">👍 Medium (8-15 LPA)</div>
+                    <div class="quiz-option" onclick="selectOption('salary','any')">😊 Passion over Money</div>
+                    <div class="quiz-option" onclick="selectOption('salary','government')">🏛️ Stable Government Job</div>
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-card" id="q4">
+                <h3>Q4. How many years can you study?</h3>
+                <p>Some careers need longer education — be realistic!</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption('duration','short course diploma', this)">📅 2-3 years (Diploma)</div>
+                    <div class="quiz-option" onclick="selectOption('duration','bachelor degree', this)">🎓 3-4 years (Bachelor's)</div>
+                    <div class="quiz-option" onclick="selectOption('duration','engineering medical', this)">📚 5 years (Professional)</div>
+                    <div class="quiz-option" onclick="selectOption('duration','doctor surgeon specialist', this)">🏥 8-10 years (Specialist)</div>
+                </div>
+            </div>
+
+            <button class="quiz-btn" id="quizBtn" onclick="runQuiz()" disabled>
+                🎯 Find My Career Match
+            </button>
+
+            <div id="quizResults" style="margin-top:24px"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================== EXPLORE PAGE ======================== -->
+<div id="page-explore" class="page">
+    <div class="container">
+        <div class="section-title">🔍 Explore All Careers</div>
+        <div class="section-sub">Browse all 100 career options or filter by category</div>
+
+        <div class="category-filter" id="categoryFilter"></div>
+        <div id="exploreResults" class="career-grid"></div>
+    </div>
+</div>
+
+<!-- ======================== ABOUT PAGE ======================== -->
+<div id="page-about" class="page">
+    <div class="container">
+        <div class="about-card">
+            <h3>🎯 About KyaKre</h3>
+            <p>KyaKre is an AI-powered career guidance platform built specifically for Indian students after 12th standard. Many students feel lost after 12th — not knowing which career to choose, which college to target, or what skills to build. KyaKre solves this by using Natural Language Processing and Machine Learning to match students with the most suitable career paths based on their interests, stream, and goals.</p>
+        </div>
+        <div class="about-card">
+            <h3>🤖 How the AI Works</h3>
+            <p>Our recommendation engine uses TF-IDF (Term Frequency-Inverse Document Frequency) vectorization to convert career descriptions into mathematical vectors. It then calculates Cosine Similarity between careers to find the closest matches. The system was trained on 100+ Indian career profiles covering Science, Commerce, and Arts streams — with real salary data, top colleges, and skill requirements.</p>
+        </div>
+        <div class="about-card">
+            <h3>⚙️ Tech Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">Python</span>
+                <span class="tech-badge">Flask</span>
+                <span class="tech-badge">Pandas</span>
+                <span class="tech-badge">Scikit-learn</span>
+                <span class="tech-badge">NLTK</span>
+                <span class="tech-badge">TF-IDF</span>
+                <span class="tech-badge">Cosine Similarity</span>
+                <span class="tech-badge">HTML/CSS/JS</span>
+                <span class="tech-badge">REST API</span>
+            </div>
+        </div>
+        <div class="about-card">
+            <h3>👨‍💻 Project Info</h3>
+            <p>This project was developed as part of a full-stack internship focused on converting the static KyaKre website into a dynamic AI-powered career guidance platform. The backend handles NLP processing and API serving, while the frontend provides an intuitive multi-tab interface for students.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// ---- STATE ----
+let quizAnswers = {};
+let allCareers = [];
+let currentStream = null;
+
+// ---- NAVIGATION ----
+function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    event.target.classList.add('active');
+
+    if (page === 'explore') loadExplore();
+}
+
+// ---- HOME SEARCH ----
+function homeQuick(term) {
+    document.getElementById('homeInput').value = term;
+    homeSearch();
+}
+
+async function homeSearch() {
+    const input = document.getElementById('homeInput').value.trim();
+    const resultsDiv = document.getElementById('homeResults');
+    if (!input) return;
+
+    resultsDiv.innerHTML = '<div class="loading">Finding best career matches for you...</div>';
+
+    try {
+        const response = await fetch('/recommend', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product: input })
+        });
+        const data = await response.json();
+        if (data.error) {
+            resultsDiv.innerHTML = `<div class="error-box">❌ ${data.error}</div>`;
+            return;
+        }
+        resultsDiv.innerHTML = renderResults(data);
+    } catch(err) {
+        resultsDiv.innerHTML = '<div class="error-box">❌ Server error.</div>';
+    }
+}
+
+// ---- STREAM PAGE ----
+async function loadStream(stream, el) {
+    document.querySelectorAll('.stream-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    currentStream = stream;
+
+    const resultsDiv = document.getElementById('streamResults');
+    resultsDiv.innerHTML = '<div class="loading">Loading ' + stream + ' careers...</div>';
+
+    try {
+        const res = await fetch('/careers?stream=' + stream);
+        const data = await res.json();
+
+        const streamClass = stream.toLowerCase() === 'science' ? 'sci' : stream.toLowerCase() === 'commerce' ? 'com' : 'art';
+
+        let html = `<div style="margin-bottom:16px;font-size:14px;color:#718096">${data.total} careers found in ${stream} stream</div>`;
+        html += '<div class="career-grid">';
+        data.careers.forEach(c => {
+            html += `
+                <div class="career-grid-card ${streamClass}" onclick="searchFromGrid('${c.name}')">
+                    <h4>${c.name}</h4>
+                    <p>${c.category}</p>
+                    <div class="salary">💰 ${c.avg_salary_lpa} LPA avg</div>
+                    <div style="margin-top:6px;font-size:11px;color:#a0aec0">⭐ ${c.rating} · Click for similar careers</div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        resultsDiv.innerHTML = html;
+    } catch(err) {
+        resultsDiv.innerHTML = '<div class="error-box">❌ Error loading careers.</div>';
+    }
+}
+
+function searchFromGrid(name) {
+    document.getElementById('homeInput').value = name;
+    showPageDirect('home');
+    homeSearch();
+}
+
+function showPageDirect(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelector('.nav-tab').classList.add('active');
+}
+
+// ---- QUIZ ----
+function selectOption(key, value, el) {
+    if (el) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+    quizAnswers[key] = value;
+    updateQuizProgress();
+}
+
+function updateQuizProgress() {
+    const total = 4;
+    const answered = Object.keys(quizAnswers).length;
+    document.getElementById('quizProgress').style.width = (answered / total * 100) + '%';
+    document.getElementById('quizBtn').disabled = answered < 2;
+}
+
+async function runQuiz() {
+    const resultsDiv = document.getElementById('quizResults');
+    const searchTerm = quizAnswers.interest || quizAnswers.stream || 'technology';
+    resultsDiv.innerHTML = '<div class="loading">Analyzing your answers</div>';
+
+    try {
+        const response = await fetch('/recommend', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product: searchTerm })
+        });
+        const data = await response.json();
+        if (data.error) {
+            resultsDiv.innerHTML = `<div class="error-box">❌ ${data.error}</div>`;
+            return;
+        }
+        resultsDiv.innerHTML = '<div style="font-size:18px;font-weight:700;color:#2d3748;margin-bottom:16px">🎉 Your Career Matches!</div>' + renderResults(data);
+    } catch(err) {
+        resultsDiv.innerHTML = '<div class="error-box">❌ Error.</div>';
+    }
+}
+
+// ---- EXPLORE ----
+async function loadExplore() {
+    if (allCareers.length > 0) return;
+    try {
+        const res = await fetch('/careers');
+        const data = await res.json();
+        allCareers = data.careers;
+        renderExplore(allCareers);
+        buildCategoryFilter(allCareers);
+    } catch(err) {}
+}
+
+function buildCategoryFilter(careers) {
+    const cats = [...new Set(careers.map(c => c.category))].sort();
+    const filterDiv = document.getElementById('categoryFilter');
+    let html = '<button class="cat-btn active" onclick="filterCategory(\'all\', this)">All</button>';
+    cats.forEach(cat => {
+        html += `<button class="cat-btn" onclick="filterCategory('${cat}', this)">${cat}</button>`;
+    });
+    filterDiv.innerHTML = html;
+}
+
+function filterCategory(cat, el) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    const filtered = cat === 'all' ? allCareers : allCareers.filter(c => c.category === cat);
+    renderExplore(filtered);
+}
+
+function renderExplore(careers) {
+    const div = document.getElementById('exploreResults');
+    let html = '';
+    careers.forEach(c => {
+        const streamClass = c.stream.toLowerCase() === 'science' ? 'sci' : c.stream.toLowerCase() === 'commerce' ? 'com' : 'art';
+        html += `
+            <div class="career-grid-card ${streamClass}" onclick="searchFromGrid('${c.name}')">
+                <h4>${c.name}</h4>
+                <p>${c.category} · ${c.stream}</p>
+                <div class="salary">💰 ${c.avg_salary_lpa} LPA</div>
+                <div style="margin-top:6px;font-size:11px;color:#a0aec0">⭐ ${c.rating}</div>
+            </div>
+        `;
+    });
+    div.innerHTML = html;
+}
+
+// ---- RENDER RESULTS ----
+function renderResults(data) {
+    let html = `
+        <div style="font-size:15px;color:#4a5568;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #e2e8f0">
+            Top matches for <strong style="color:#667eea">"${data.searched_career}"</strong>
+            <span style="margin-left:8px" class="badge badge-cat">${data.stream}</span>
+        </div>
+    `;
+
+    data.recommendations.forEach((rec, index) => {
+        const scorePercent = Math.round(rec.similarity_score * 100);
+        const streamClass = rec.stream.toLowerCase() === 'science' ? 'sci' : rec.stream.toLowerCase() === 'commerce' ? 'com' : 'art';
+        const badgeClass = 'badge-' + streamClass;
+        html += `
+            <div class="career-card ${streamClass}">
+                <div class="card-left">
+                    <span class="rank">#${index + 1}</span>
+                    <div class="career-info">
+                        <h3>${rec.name}</h3>
+                        <p>${rec.description.substring(0, 130)}...</p>
+                        <div class="badges">
+                            <span class="badge ${badgeClass}">${rec.stream}</span>
+                            <span class="badge badge-cat">${rec.category}</span>
+                            <span class="badge badge-sal">💰 ${rec.avg_salary_lpa} LPA</span>
+                            <span class="badge badge-cat">⭐ ${rec.rating}</span>
+                        </div>
+                        <div class="skills-text">Skills: <span>${rec.skills_needed}</span></div>
+                    </div>
+                </div>
+                <div class="score-box">
+                    <div class="score">${scorePercent}%</div>
+                    <div class="score-label">match</div>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width:${scorePercent}%"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    return html;
+}
+</script>
+</body>
+</html>
